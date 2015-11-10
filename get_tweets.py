@@ -50,9 +50,9 @@ def CountDomains(usernames):
             for url in urls: # for every url in the list of urls that the regex found
                 try:
                     link = requests.get(url, allow_redirects=True).url  # request each link using the requests library and follow redirects to the end. This stops links like t.co showing up in the results
-                    links.append(str(link)) #put all of the urls into the list named links
+                    links.append(link) #put all of the urls into the list named links
                     domain = get_tld(link) #use the get_tld function from the tld library to turn urls into domains
-                    domains.append(str(domain))#append the domain to the domains list that was created at the start
+                    domains.append(domain)#append the domain to the domains list that was created at the start
                     
                 except:
                     pass
