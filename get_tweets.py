@@ -46,9 +46,9 @@ def CountDomains():
             for url in urls: # for every url in the list of urls that the regex found
                 try:
                     link = requests.get(url, allow_redirects=True).url  # request each link using the requests library and follow redirects to the end. This stops links like t.co showing up in the results
-                    links.append(link) #put all of the urls into the list named links
+                    links.append(str(link)) #put all of the urls into the list named links
                     domain = get_tld(link) #use the get_tld function from the tld library to turn urls into domains
-                    domains.append(domain)#append the domain to the domains list that was created at the start
+                    domains.append(str(domain))#append the domain to the domains list that was created at the start
                     
                 except Exception, e:
                     print link
@@ -63,22 +63,19 @@ def CountDomains():
         for tag in doc.findall('.//text'): # find all the <text> tags in the xml that is returned and assign the name tag. The <text> tag is the concept text that we want to keep a list of.
             tags.append(tag.text)
 
-#   print "The top domains these people read are:"
-#   print Counter(domains)
-#   print "The topics this person is interested in are:"
-#   print Counter(tags)
     today = datetime.datetime.now()
     postfix = today.strftime('%Y-%m-%d-%H-%M')
+
     with open("domains_" + postfix + ".csv", "a") as personas:
         personaswriter = csv.writer(personas)
-        for domain in domains:
-            personaswriter.writerow(domains)
+        for domain, count in dict(Counter(domains)).items():
+            personaswriter.writerow([domain, count])
         personas.close()
 
     with open("concepts_" + postfix + ".csv", "a") as concepts:
         conceptswriter = csv.writer(concepts)
-        for domain in domains:
-            conceptswriter.writerow(tags)
+        for tag, count in dict(Counter(tags)).items():
+            conceptswriter.writerow([tag, count])
         concepts.close()
         
 
