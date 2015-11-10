@@ -1,5 +1,6 @@
 import re
 import csv
+import datetime
 
 import requests
 import tweepy
@@ -66,11 +67,19 @@ def CountDomains():
 #   print Counter(domains)
 #   print "The topics this person is interested in are:"
 #   print Counter(tags)
-    with open("persona.csv", "a") as personas:
+    today = datetime.datetime.now()
+    postfix = today.strftime('%Y-%m-%d-%H-%M')
+    with open("domains_" + postfix + ".csv", "a") as personas:
         personaswriter = csv.writer(personas)
         for domain in domains:
-            personaswriter.writerow([domains,tags])
+            personaswriter.writerow(domains)
         personas.close()
+
+    with open("concepts_" + postfix + ".csv", "a") as concepts:
+        conceptswriter = csv.writer(concepts)
+        for domain in domains:
+            conceptswriter.writerow(tags)
+        concepts.close()
         
 
 CountDomains()
