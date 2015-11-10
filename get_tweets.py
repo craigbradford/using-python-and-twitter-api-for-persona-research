@@ -34,7 +34,11 @@ usernames = open('usernames.txt', 'r+') # make a variable for the Twitter userna
 usernames = usernames.read().splitlines() # create a variable named usernames which is the usernames split by line. 
 
 
-def CountDomains():
+def CountDomains(usernames):
+
+    print "Starting tweet collection..."
+    print str(len(usernames)) + " usernames.\n"
+
     for name in usernames: #for all the usernames in the usernames file...
 
         public_tweets = api.user_timeline(name, count=10) #create a variable named public_tweets which is the users last n tweets
@@ -50,9 +54,14 @@ def CountDomains():
                     domain = get_tld(link) #use the get_tld function from the tld library to turn urls into domains
                     domains.append(str(domain))#append the domain to the domains list that was created at the start
                     
-                except Exception, e:
-                    print link
+                except:
+                    pass
+
+        print "\tFinished: " + name
     
+    print "\nStarting Alchemy analysis of links..."
+    print str(len(links)) + " links.\n"
+
     for link in links: # for each of the urls in the urls list that was created above...
         apiurl = ConceptsAPI+link # create a new url by concatenating the concepts API base url (defined at the start) to the link we want to get the concepts for
         
@@ -62,6 +71,9 @@ def CountDomains():
         
         for tag in doc.findall('.//text'): # find all the <text> tags in the xml that is returned and assign the name tag. The <text> tag is the concept text that we want to keep a list of.
             tags.append(tag.text)
+        print "\tFinished: " + link
+
+    print "\nDone. :)"
 
     today = datetime.datetime.now()
     postfix = today.strftime('%Y-%m-%d-%H-%M')
@@ -79,6 +91,6 @@ def CountDomains():
         concepts.close()
         
 
-CountDomains()
+CountDomains(usernames)
     
       
