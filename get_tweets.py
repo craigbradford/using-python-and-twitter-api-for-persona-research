@@ -40,9 +40,11 @@ def CountDomains(usernames):
     print str(len(usernames)) + " usernames.\n"
 
     for name in usernames: #for all the usernames in the usernames file...
-
-        public_tweets = api.user_timeline(name, count=10) #create a variable named public_tweets which is the users last n tweets
-        
+        try:
+            public_tweets = api.user_timeline(name, count=20) #create a variable named public_tweets which is the users last n tweets
+        except:
+            print "private profile"
+            continue 
         for tweet in public_tweets: #for every tweet in the public_tweets list...
         
             urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', tweet.text) # use regex to find the links in the tweet body
@@ -50,8 +52,8 @@ def CountDomains(usernames):
             for url in urls: # for every url in the list of urls that the regex found
                 try:
                     link = requests.get(url, allow_redirects=True).url  # request each link using the requests library and follow redirects to the end. This stops links like t.co showing up in the results
-                    links.append(link) #put all of the urls into the list named links
-                    domain = get_tld(link) #use the get_tld function from the tld library to turn urls into domains
+                    links.append(link)# put all of the urls into the list named links
+                    domain = get_tld(link)#use the get_tld function from the tld library to turn urls into domains
                     domains.append(domain)#append the domain to the domains list that was created at the start
                     
                 except:
