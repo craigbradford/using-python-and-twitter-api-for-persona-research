@@ -11,7 +11,7 @@ ptyprocess==0.5
 requests==2.8.1
 requests-oauthlib==0.5.0
 simplegeneric==0.8.1
-six==1.10.0
+six==1.4.1
 tld==0.7.4
 traitlets==4.0.0
 tweepy==3.4.0
